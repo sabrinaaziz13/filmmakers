@@ -1,0 +1,82 @@
+{% extends 'base.html' %} 
+{% block content %}
+<div class="detail__img">
+    <img src="{{director.img}}" alt="{{director.name}}" />
+</div>
+<div class="detail__name">
+    {% if director.verified_director %}
+    <div class="icon-text">
+        <span class="icon has-text-info">
+            <i class="fas fa-check-circle"></i>
+        </span>
+        <span>Verified</span>
+    </div>
+    {% endif %}
+    <h1 class="title">{{director.name}}</h1>
+</div>
+<div class="detail__container">
+    <div class="buttons">
+        <a href="{% url 'director_update' director.pk %}" class="button is-info"> Update
+            <span class="icon">
+                <i class="fas fa-edit"></i>
+            </span>
+        </a>
+        <a href="{% url 'director_delete' director.pk %}" class="button is-danger">
+          <span class="icon">
+              <i class="fas fa-trash-alt"></i>
+          </span>
+      </a>
+    </div>
+    <div class="detail__movies mb-5">
+        <h3 class="title is-3">Movies</h3>
+        <form class="mb-5" action="{% url 'movie_create' director.pk %}" method="post">
+            {% csrf_token %}
+            <div class="field has-addons">
+                <div class="control">
+                    <input
+                        class="input"
+                        type="text"
+                        name="title"
+                        placeholder="Title"
+                        required
+                    />
+                </div>
+                <div class="control">
+                    <input
+                        class="input"
+                        type="text"
+                        name="year"
+                        placeholder="Year"
+                        required
+                    />
+                </div>
+                <div class="control">
+                    <input class="button is-primary" type="submit" value="Add Movie" />
+                </div>
+            </div>
+        </form>
+        
+        {% for movie in director.movies.all %}
+        <div class="movie">
+          <span>{{forloop.counter}}</span>
+          <span><b>  
+            <a href="{% url 'movie_detail' movie.pk %}">
+            {{movie.title}}</a></b></span>
+          <span>({{movie.get_year}})</span>
+        </div>
+            {% empty %}
+        <article class="message">
+          <div class="message-header">
+            <p>No Movies Available</p>
+          </div>
+        </article>
+    
+        {% endfor %}
+      </div>
+    <div class="detail__about">
+        <h4 class="title is-4">About</h4>
+        <p>{{director.bio}}</p>
+    </div>
+</div>
+
+{% endblock %}
