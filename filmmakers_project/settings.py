@@ -30,7 +30,7 @@ if RENDER_EXTERNAL_HOSTNAME:
 # Application definition
 
 INSTALLED_APPS = [
-    'render.apps.RenderConfig',
+    # 'render.apps.RenderConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,8 +78,9 @@ WSGI_APPLICATION = 'filmmakers_project.wsgi.application'
 # To use Neon with Django, you have to create a Project on Neon and specify the project connection settings in your settings.py in the same way as for standalone Postgres.
 
 DATABASES = {
+    # 'ENGINE': 'django.db.backends.postgresql',
     'default': dj_database_url.config(
-        # Feel free to alter this value to suit your needs.
+        default = f"postgres://{os.environ['DB_USER']}:{os.environ['DB_PW']}@{os.environ['DB_HOST']}/filmmakers",
         conn_max_age=600,
         conn_health_checks=True,
     )
